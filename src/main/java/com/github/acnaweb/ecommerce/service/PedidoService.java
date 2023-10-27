@@ -19,4 +19,9 @@ public class PedidoService {
 		return pedidoRepository.findAll();
 	}
 
+	public List<Pedido> findByCliente(long id) {
+
+		return pedidoRepository.findByCliente(id);
+	}
+
 }

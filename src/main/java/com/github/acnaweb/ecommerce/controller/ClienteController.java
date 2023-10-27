@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.acnaweb.ecommerce.model.Cliente;
+import com.github.acnaweb.ecommerce.model.Pedido;
 import com.github.acnaweb.ecommerce.service.ClienteService;
+import com.github.acnaweb.ecommerce.service.PedidoService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClienteController {
 	private final ClienteService clienteService;
+	private final PedidoService pedidoService;
 	private final ModelMapper modelMapper;
 
 	@GetMapping
@@ -37,7 +40,7 @@ public class ClienteController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "{id}")
+	@GetMapping("{id}")
 	public ResponseEntity<ClienteDTO> findById(@PathVariable long id) {
 		if (!clienteService.exists(id)) {
 			return ResponseEntity.notFound().build();
@@ -48,9 +51,22 @@ public class ClienteController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
+	@GetMapping("{id}/pedidos")
+	public ResponseEntity<List<PedidoDTO>> findPedidosByClienteId(@PathVariable long id) {
+		if (!clienteService.exists(id)) {
+			return ResponseEntity.notFound().build();
+		}
+
+		List<PedidoDTO> dto = null; // this.map(clienteService.findById(id));
+
+		List<Pedido> pedidos = pedidoService.findByCliente(id);
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
 	@PostMapping
 	public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteCreateDTO requestDto) {
-		
+
 		Cliente cliente = map(requestDto);
 
 		Cliente clienteSaved = clienteService.save(cliente);
