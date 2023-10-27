@@ -1,6 +1,7 @@
 package com.github.acnaweb.ecommerce.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.acnaweb.ecommerce.model.Pedido;
 import com.github.acnaweb.ecommerce.service.PedidoService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,12 +25,17 @@ public class PedidoController {
 	@GetMapping
 	public ResponseEntity<List<PedidoDTO>> getAll() {
 
-		// mapear/converter cada Cliente -> ClienteDTO
-		List<PedidoDTO> result = null;
-				
-		//pedidoService.getAll().stream().map(this::map).collect(Collectors.toList());
+		List<PedidoDTO> result = pedidoService.getAll().stream().map(this::map).collect(Collectors.toList());
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	private PedidoDTO map(Pedido pedido) {
+		PedidoDTO dto = modelMapper.map(pedido, PedidoDTO.class);
+
+		dto.setCliente_id(pedido.getCliente().getId());
+
+		return dto;
 	}
 
 //	@GetMapping(value = "{id}")
@@ -59,9 +66,5 @@ public class PedidoController {
 //		return cliente;
 //	}
 //
-//	private ClienteDTO map(Cliente cliente) {
-//		ClienteDTO dto = modelMapper.map(cliente, ClienteDTO.class);
-//		return dto;
-//	}
 
 }
