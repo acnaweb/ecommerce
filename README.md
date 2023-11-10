@@ -94,6 +94,7 @@ git push --set-upstream origin develop
 - https://springjava.com/spring-boot/response-entity-in-rest-api-crud-example-spring-boot
 - https://www.baeldung.com/java-optional
 - https://www.baeldung.com/spring-hateoas-tutorial
+- https://www.baeldung.com/spring-data-jpa-projections
 
 ## Cursos
 

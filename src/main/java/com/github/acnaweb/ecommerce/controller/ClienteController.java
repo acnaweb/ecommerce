@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.acnaweb.ecommerce.model.Cliente;
+import com.github.acnaweb.ecommerce.repository.ClienteRepository;
 import com.github.acnaweb.ecommerce.service.ClienteService;
 import com.github.acnaweb.ecommerce.service.PedidoService;
 
@@ -28,6 +30,21 @@ public class ClienteController {
 	private final PedidoService pedidoService;
 	private final ClienteMapper clienteMapper;
 	private final PedidoMapper pedidoMapper;
+	private final ClienteRepository clienteRepository;
+
+	@GetMapping("/param")
+	public ResponseEntity<List<?>> findByUf(@RequestParam("uf") String uf, @RequestParam("tipo") String tipo) {
+
+		List<?> result = null;
+		if ("1".equals(tipo))
+			result = clienteRepository.findByUf(
+					uf.toUpperCase(), ClienteView1.class);
+		else if ("2".equals(tipo))
+			result = clienteRepository.findByUf(
+					uf.toUpperCase(), ClienteView2.class);
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	@GetMapping
 	public ResponseEntity<List<ClienteDTO>> getAll() {
