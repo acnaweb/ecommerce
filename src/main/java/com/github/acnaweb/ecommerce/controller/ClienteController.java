@@ -1,12 +1,10 @@
 package com.github.acnaweb.ecommerce.controller;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.acnaweb.ecommerce.model.Cliente;
-import com.github.acnaweb.ecommerce.model.Pedido;
 import com.github.acnaweb.ecommerce.service.ClienteService;
 import com.github.acnaweb.ecommerce.service.PedidoService;
 
@@ -29,13 +26,14 @@ import lombok.RequiredArgsConstructor;
 public class ClienteController {
 	private final ClienteService clienteService;
 	private final PedidoService pedidoService;
-	private final ModelMapper modelMapper;
+	private final ClienteMapper clienteMapper;
+	private final PedidoMapper pedidoMapper;
 
 	@GetMapping
 	public ResponseEntity<List<ClienteDTO>> getAll() {
 
 		// mapear/converter cada Cliente -> ClienteDTO
-		List<ClienteDTO> result = clienteService.getAll().stream().map(this::map).collect(Collectors.toList());
+		List<ClienteDTO> result = clienteService.getAll().stream().map(clienteMapper::map).collect(Collectors.toList());
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
@@ -46,7 +44,7 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 
-		ClienteDTO dto = this.map(clienteService.findById(id));
+		ClienteDTO dto = clienteMapper.map(clienteService.findById(id));
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
@@ -57,33 +55,21 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 
-		List<PedidoDTO> dto = null; // this.map(clienteService.findById(id));
+		List<PedidoDTO> dto = pedidoService.findByCliente(id).stream().map(pedidoMapper::map)
+				.collect(Collectors.toList());
 
-		List<Pedido> pedidos = pedidoService.findByCliente(id);
-		
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
 	@PostMapping
 	public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteCreateDTO requestDto) {
 
-		Cliente cliente = map(requestDto);
+		Cliente cliente = clienteMapper.map(requestDto);
 
 		Cliente clienteSaved = clienteService.save(cliente);
 
-		ClienteDTO responseDto = this.map(clienteSaved);
+		ClienteDTO responseDto = clienteMapper.map(clienteSaved);
 		return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
-	}
-
-	private Cliente map(ClienteCreateDTO dto) {
-		Cliente cliente = modelMapper.map(dto, Cliente.class);
-		cliente.setDataCadastro(Instant.now());
-		return cliente;
-	}
-
-	private ClienteDTO map(Cliente cliente) {
-		ClienteDTO dto = modelMapper.map(cliente, ClienteDTO.class);
-		return dto;
 	}
 
 }
