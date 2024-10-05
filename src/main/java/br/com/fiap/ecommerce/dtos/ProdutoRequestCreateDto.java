@@ -1,23 +1,12 @@
 package br.com.fiap.ecommerce.dtos;
 
-import org.modelmapper.ModelMapper;
+import java.math.BigDecimal;
 
-import br.com.fiap.ecommerce.model.Produto;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter
+@Setter
 public class ProdutoRequestCreateDto {
     private String nome;
-    private static final ModelMapper modelMapper = new ModelMapper();
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Produto toModel() {
-        return modelMapper.map(this, Produto.class);
-    }
-    
+	private BigDecimal valor;
 }

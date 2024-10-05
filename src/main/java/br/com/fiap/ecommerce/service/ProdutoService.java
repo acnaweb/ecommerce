@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 import br.com.fiap.ecommerce.model.Produto;
 import br.com.fiap.ecommerce.repository.ProdutoRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ProdutoService {
-    
-    @Autowired
-    private ProdutoRepository produtoRepository;
+    private final ProdutoRepository produtoRepository;
 
     public List<Produto> list() {
         return produtoRepository.findAll();
