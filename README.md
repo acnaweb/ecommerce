@@ -65,4 +65,8 @@ docker run -d \
     ecommerce
 ```
 
+## References
+
+- https://www.baeldung.com/spring-data-jpa-projections
+- https://www.baeldung.com/spring-jpa-like-queries
 
