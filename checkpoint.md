@@ -14,7 +14,7 @@
 #### 1. (_4 pontos_) - Criar as classes "mapper" para cada DTOs relativo ao respectivos Models.
 Exempo: ProdutoMapper implementa os mapeamentos relativos a DTOs utilizados na controller ProdutoController.
 
-#### 2. (_4 pontos_) - Refatorar todas as controller para que se faça uso das "mappers" criadas no item 1
+#### 2. (_4 pontos_) - Refatorar todas as controllers para que se faça uso das "mappers" criadas no item 1.
 
-#### 3. (_2 ponto_) - Refatorar as DTOs e Models com o objetivo de elimiar os gets/sets implementados manualmente. Usar Lombok!
+#### 3. (_2 pontos_) - Refatorar as DTOs e Models com o objetivo de elimiar os gets/sets implementados manualmente. Usar Lombok!
 
